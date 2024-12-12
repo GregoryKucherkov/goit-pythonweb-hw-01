@@ -1,4 +1,12 @@
 from abc import ABC, abstractmethod
+import logging
+
+
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
+
 
 class Book:
     def __init__(self, title: str, author: str, year: str):
@@ -6,16 +14,17 @@ class Book:
         self.author = author
         self.year = year
 
+
 class LibraryInterface(ABC):
 
     @abstractmethod
     def add_book(self, book: Book):
         pass
-    
+
     @abstractmethod
     def remove_book(self, title: str):
         pass
-    
+
     @abstractmethod
     def show_books(self):
         pass
@@ -36,16 +45,18 @@ class Library(LibraryInterface):
         for book in self.books:
             if book.title == title:
                 self.books.remove(book)
-                print(f"Book '{title}' removed from the library.")
+                logger.info(f"Book '{title}' removed from the library.")
                 return
-        print(f"Book {title} not found")
+        logger.info(f"Book {title} not found")
 
     def show_books(self):
         if self.books:
             for book in self.books:
-                print(f'Title: {book.title}, Author: {book.author}, Year: {book.year}')
+                logger.info(
+                    f"Title: {book.title}, Author: {book.author}, Year: {book.year}"
+                )
         else:
-            print("No books in library")
+            logger.info("No books in library")
 
     def get_books(self) -> list:
         return self.books
@@ -58,11 +69,10 @@ class LibraryManager:
     def add_book(self, title: str, author: str, year: str):
         book = Book(title, author, year)
         self.library.add_book(book)
-        print(f"Book '{title}' by {author} added to the library.")
+        logger.info(f"Book '{title}' by {author} added to the library.")
 
     def remove_book(self, title: str):
         self.library.remove_book(title)
- 
 
     def show_books(self):
         self.library.show_books()
@@ -89,12 +99,8 @@ def main():
             case "exit":
                 break
             case _:
-                print("Invalid command. Please try again.")
+                logger.warning("Invalid command. Please try again.")
+
 
 if __name__ == "__main__":
     main()
-
-   
-
-    
-

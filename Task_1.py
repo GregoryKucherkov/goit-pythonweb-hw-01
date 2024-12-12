@@ -1,4 +1,12 @@
 from abc import ABC, abstractmethod
+import logging
+
+
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
+
 
 class Vehicle(ABC):
     def __init__(self, brand: str, model: str):
@@ -9,14 +17,16 @@ class Vehicle(ABC):
     def start_engine(self):
         pass
 
+
 class Car(Vehicle):
     def start_engine(self):
-        print(f"{self.brand} {self.model}: The engine is started")
+        logger.info(f"{self.brand} {self.model}: The engine is started")
+
 
 class Motorcycle(Vehicle):
 
     def start_engine(self):
-        print(f"{self.brand} {self.model}: Brrrr.. The engine is started")
+        logger.info(f"{self.brand} {self.model}: Brrrr.. The engine is started")
 
 
 class VehicleFactory(ABC):
@@ -28,30 +38,32 @@ class VehicleFactory(ABC):
     def create_motorcycle(self, brand: str, model: str):
         pass
 
+
 class USVehicleFactory(VehicleFactory):
 
-    def create_car(self, brand: str, model: str ):
+    def create_car(self, brand: str, model: str):
         car = Car(brand, model)
-        print(f"US Spec {brand} {model} is created")
+        logger.info(f"US Spec {brand} {model} is created")
         return car
 
     def create_motorcycle(self, brand: str, model: str):
         motorcycle = Motorcycle(brand, model)
-        print(f"US Spec {brand} {model} is created")
+        logger.info(f"US Spec {brand} {model} is created")
         return motorcycle
+
 
 class EUVehicleFactory(VehicleFactory):
 
-    def create_car(self, brand: str, model: str ):
+    def create_car(self, brand: str, model: str):
         car = Car(brand, model)
-        print(f"EU Spec {brand} {model} is created")
+        logger.info(f"EU Spec {brand} {model} is created")
         return car
 
     def create_motorcycle(self, brand: str, model: str):
         motorcycle = Motorcycle(brand, model)
-        print(f"EU Spec {brand} {model} is created")
+        logger.info(f"EU Spec {brand} {model} is created")
         return motorcycle
-    
+
 
 if __name__ == "__main__":
     us_factory = USVehicleFactory()
@@ -68,7 +80,3 @@ if __name__ == "__main__":
 
     us_moto.start_engine()
     eu_moto.start_engine()
-
-
-
-
